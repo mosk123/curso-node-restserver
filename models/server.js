@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const { dbConnection } = require('../database/config');
 
 
 class Server {
@@ -8,15 +9,23 @@ class Server {
     
         this.app = express();
         this.port = process.env.PORT;
-        // Declaro una variable con el path. De ese modos, se entiende cual es el path claramente.
+        // Declaro una variable con el path. De ese modo, se entiende cual es el path claramente.
         this.usuariosPath = '/api/usuarios';
+
+        // Conectar a base de datos.
+        this.conectarDB();
+
         
         // MIDDLEWERES son funciones que agregan otras funciones al web server
         this.middleweres();
-        // Rutas de mi aplicacion
-
         
+        
+        // Rutas de mi aplicacion
         this.routes();
+    }
+
+    async conectarDB(){
+        await dbConnection();
     }
 
     middleweres(){
