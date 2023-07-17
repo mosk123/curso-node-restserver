@@ -71,10 +71,10 @@ const usuariosPost = async(req, res = response) => {
     // const body = req.body;
     // Pero es mejor desestructurar para elejir que traer
     // Se asigna el body al request. 
-    const { nombre, correo, password, rol, google } = req.body;
+    const { nombre, correo, password, rol } = req.body;
 
     // Creamos la instancia de Usuario.
-    const usuario = new Usuario({ nombre, correo, password, rol, google });
+    const usuario = new Usuario({ nombre, correo, password, rol });
 
     // Verificar si el correo existe
     // const existeEmail = await Usuario.findOne({correo});

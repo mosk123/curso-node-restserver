@@ -1,11 +1,11 @@
-const role = require('../models/role');
+const Role = require('../models/role');
 const Usuario = require('../models/usuario')
 
 // Se crea la funcion que valida si existe rol
 
 const esRolValido =  async(rol = '') =>{
 
-    const existeRol = await role.findOne({rol});
+    const existeRol = await Role.findOne({rol});
     if(!existeRol){
         throw new Error(` El rol ${rol}, no esta registrado en la DB`)
     }

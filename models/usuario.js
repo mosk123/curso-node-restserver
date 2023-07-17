@@ -31,7 +31,7 @@ const UsuarioSchema = Schema({
     },
     google: {
         type: Boolean,
-        require: false
+        default: false
     }                       
 
 });
