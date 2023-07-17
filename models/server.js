@@ -12,6 +12,9 @@ class Server {
         // Declaro una variable con el path. De ese modo, se entiende cual es el path claramente.
         this.usuariosPath = '/api/usuarios';
 
+        //Declaro el path de autenticacion
+        this.authPath = '/api/auth';
+
         // Conectar a base de datos.
         this.conectarDB();
 
@@ -42,6 +45,9 @@ class Server {
     }
 
     routes(){
+        // Declaro el nuevo path de autenticacion de usuario con token.
+        this.app.use(this.authPath, require('../routes/auth'));
+
         // Aqui se declara el path '/api/usuarios' y la ruta donde estan definidos.
         this.app.use(this.usuariosPath, require('../routes/usuarios'));
     }

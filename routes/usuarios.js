@@ -1,8 +1,15 @@
 
 const { Router } = require('express');
-const { usuariosGet, usuariosPost, usuariosPut, usuariosPatch, usuariosDelete } = require('../controllers/usuarios');
 const { check } = require('express-validator');
-const { validarCampos } = require('../middlewares/validar-campos');
+
+// const { validarCampos } = require('../middlewares/validar-campos');
+// const { validarJWT } = require('../middlewares/validar-jwt');
+// const { esAdminRole, tieneRole } = require('../middlewares/validar-roles');
+
+// Lo expuesto arriba es sustituido por esta manera de importarlo. Se crea en middleweres un INDEX. Se importa en el, y exporta.
+const {validarCampos, validarJWT, tieneRole, esAdminRole} = require('../middlewares');
+
+const { usuariosGet, usuariosPost, usuariosPut, usuariosPatch, usuariosDelete } = require('../controllers/usuarios');
 const { esRolValido, esMailValido, esUsuarioIdValido } = require('../helpers/db-validators');
 
 
@@ -32,6 +39,12 @@ router.post('/', [
 ] ,usuariosPost);
 
 router.delete('/:id', [
+    // Se pone primero el de token, ya que si da error, no podra continar. Recorda que es un middleware. Funcion que valida algo antes de continuar.
+    validarJWT,
+    // Este valida estrictamente si es o no ADMIN el rol para poder eliminar usuarios.
+    // esAdminRole,
+    // Valida si el usuario tiene rol Admin o Ventas
+    tieneRole('ADMIN_ROLE','VENTAS_ROLE'),
     check('id', 'No es un ID valido').isMongoId(),
     check('id').custom( esUsuarioIdValido ),
     validarCampos

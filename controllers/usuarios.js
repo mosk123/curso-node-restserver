@@ -71,10 +71,10 @@ const usuariosPost = async(req, res = response) => {
     // const body = req.body;
     // Pero es mejor desestructurar para elejir que traer
     // Se asigna el body al request. 
-    const { nombre, correo, password, rol } = req.body;
+    const { nombre, correo, password, rol, google } = req.body;
 
     // Creamos la instancia de Usuario.
-    const usuario = new Usuario({ nombre, correo, password, rol });
+    const usuario = new Usuario({ nombre, correo, password, rol, google });
 
     // Verificar si el correo existe
     // const existeEmail = await Usuario.findOne({correo});
@@ -131,13 +131,19 @@ const usuariosDelete = async(req, res = response) => {
 
     const { id } = req.params;
 
+    // const uid = req.uid;
+
     // Borramos fisicamente.
     // const usuario = await Usuario.findByIdAndDelete( id );
     
     const usuario = await Usuario.findByIdAndUpdate(id, { estado: false });
+    
+    // creamos constante para usuario autenticado.
+    // const usuarioAutenticado = req.usuario;
 
     res.json({
-        usuario
+        usuario,
+        // usuarioAutenticado
     });
 }
 

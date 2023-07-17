@@ -39,7 +39,8 @@ const UsuarioSchema = Schema({
 // Creamos un metodo global para encriptar la contraseña cuando la trae el request de la consulta.
 UsuarioSchema.methods.toJSON = function () {
     // Desestructuramos las variables que deseamos sacar de la respuesta. y con el Spreed creamos todo el nuevo objeto ...usuario
-    const { __v, password, ...usuario } = this.toObject();
+    const { __v, password, _id, ...usuario } = this.toObject();
+    usuario.uid = _id;
     // retornamos el usuario sin __v y sin password
     return usuario;
     
