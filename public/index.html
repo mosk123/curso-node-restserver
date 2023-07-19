@@ -3,11 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceso Denegado</title>
+    <title>Google Sing in</title>
 </head>
 <body>
 
-    <h1>Acceso Denegado</h1>
+    <h1>Google Sing in</h1>
+    <hr>
+
+    <div id="g_id_onload"
+         data-client_id="812768508886-e3h5d79macefburjrjv775pqe2ia27ul.apps.googleusercontent.com"
+         data-auto_prompt="false"
+         data-callback="handleCredentialResponse">
+      </div>
+      <div class="g_id_signin"
+         data-type="standard"
+         data-size="large"
+         data-theme="outline"
+         data-text="sign_in_with"
+         data-shape="rectangular"
+         data-logo_alignment="left">
+      </div>
+
+      <button id="google_singout">Sing Out</button>
     
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <script>
+        function handleCredentialResponse(response) {
+
+            // Google token 
+           //    console.log('id_token',response.credential);
+           // Con este modo, traemos el id token de google por el body. Es necesario mirar que metodo usamos en el endpoint. Porque por defecto el fetch es metodo "GET"
+           // Debemos configurarlo.- Usamos el segundo parametro 
+           
+           const body = {id_token: response.credential}
+
+
+           fetch('http://localhost:8080/api/auth/google', {
+            method: 'POST',
+            headers: {
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify(body)
+           })
+           .then(resp => resp.json())
+           .then(resp =>{
+            console.log(resp)
+            // Aqui tenesmo la respuesta del usuario autenticado. La usaremos para el btn desloguear borrandola del localStorage
+            localStorage.setItem('correo', resp.usuario.correo)
+
+
+           })
+           .catch(console.warn);
+      
+
+        }
+// Funcion del btn para desloguear usuario google.
+
+        const button = document.getElementById('google_singout');
+        button.onclick = ()=>{
+            // Podemos acceder a google.accounts.id y nos dara los metodos.
+            // console.log(google.accounts.id)
+            google.accounts.id.disableAutoSelect();
+
+            google.accounts.id.revoke(localStorage.getItem('correo'), done =>{
+                localStorage.clear();
+                location.reload();
+            })
+
+
+        }
+
+      </script>
+
 </body>
 </html>
